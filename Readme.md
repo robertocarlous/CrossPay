@@ -1,4 +1,4 @@
-CrossPay AI
+## CrossPay AI
 
 Conversational Cross-Chain Payment Agent
 
@@ -9,7 +9,7 @@ Think of it as Venmo + ChatGPT + Cross-Chain Infrastructure.
 "Bridge 50 USDC from Ethereum to Solana and send to @simze_dev"
 CrossPay AI parses the request, resolves the recipient, finds the best route via LI.FI, previews fees, and executes the transaction after confirmation.
 
-Table of Contents
+## Table of Contents
 
 Features
 Architecture
@@ -23,7 +23,7 @@ Roadmap
 License
 
 
-Features
+## Features
 🧠 Conversational Payment Agent
 Natural language and voice payment execution with human-readable transaction flows and full cross-chain support.
 🌉 Cross-Chain Payments with LI.FI
@@ -44,7 +44,7 @@ After successful execution: payment receipts, SMS notifications, email confirmat
 🌍 Multilingual Support
 Planned support for English, Yoruba, Hindi, French, and Swahili.
 
-Architecture
+## Architecture
 User Input (Voice/Text)
         ↓
 AI Intent Parser
@@ -61,7 +61,7 @@ Bridge / Swap Execution
         ↓
 Receipt + Notifications
 
-Core AI Workflow
+## Core AI Workflow
 The AI agent converts natural language into structured payment intents.
 Input:
 "Send 100 USDC to @simze_dev on Base"
@@ -76,7 +76,7 @@ json{
 }
 The intent is then routed through recipient resolution → LI.FI quote generation → swap/bridge execution → wallet confirmation.
 
-Security Model
+## Security Model
 CrossPay AI never blindly signs transactions.
 
 User confirmation is required before every execution
@@ -86,10 +86,10 @@ Escrow remains the source of truth
 Large transfers are flagged for human review
 
 
-Tech Stack
+## Tech Stack
 LayerTechnologiesFrontendNext.js, TailwindCSS, shadcn/ui, Wagmi, viemAIVercel AI SDK, Groq / OpenAI, LangGraph / LangChainBlockchainLI.FI SDK, Solana web3.js, EVM chains, Smart wallets / Account abstractionNotificationsTwilio, Resend
 
-Getting Started
+## Getting Started
 1. Clone the repository
 bashgit clone <repo-url>
 cd crosspay-ai
@@ -97,18 +97,12 @@ cd crosspay-ai
 bashnpm install
 3. Set up environment variables
 Create a .env.local file in the root:
-OPENAI_API_KEY=
-GROQ_API_KEY=
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
-LIFI_API_KEY=
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-RESEND_API_KEY=
+
 4. Start the development server
 bashnpm run dev
 App runs on http://localhost:3000
 
-AI Agent
+## AI Agent
 System Prompt
 You are CrossPay AI, a helpful crypto payment assistant.
 Help users send money across chains using LI.FI.
@@ -117,7 +111,7 @@ Parse natural language into structured payment intents.
 Available Tools
 ToolDescriptionresolveRecipient()Resolves usernames, ENS, or phone numbers to wallet addressesgetLifiQuote()Fetches the optimal bridge/swap routeexecuteBridge()Executes a cross-chain transactionsendReceipt()Generates a payment receiptnotifyRecipient()Sends SMS/email notification to the recipient
 
-Hackathon Demo Flow
+## Demo Flow
 
 User opens the chat interface and types:
 
@@ -130,7 +124,7 @@ CrossPay executes the bridge, swap, and payment
 Recipient receives funds, a notification, and a receipt
 
 
-Roadmap
+## Roadmap
 
  Voice-powered payments
  WhatsApp payment assistant
@@ -142,8 +136,8 @@ Roadmap
  Fraud detection engine
 
 
-Contributors
+## Contributors
 Built for hackathons, builders, and the future of conversational crypto payments.
 
-License
+## License
 MIT
