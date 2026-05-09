@@ -1,0 +1,24 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+lifi = "EeFVbxa8WQxZTh3G5bG4p44XMYpsZZR6FZU6GGyVAWJ1"
+
+[programs.devnet]
+lifi = "EeFVbxa8WQxZTh3G5bG4p44XMYpsZZR6FZU6GGyVAWJ1"
+
+[programs.testnet]
+lifi = "EeFVbxa8WQxZTh3G5bG4p44XMYpsZZR6FZU6GGyVAWJ1"
+
+[provider]
+cluster = "testnet"
+wallet = "../phantom-key.json"
+
+[scripts]
+test = "cargo test"
+
+[hooks]
