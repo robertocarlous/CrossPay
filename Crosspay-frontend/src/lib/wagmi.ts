@@ -1,24 +1,12 @@
-import { createConfig, http } from 'wagmi'
+import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 import { mainnet, arbitrum, optimism, base, polygon } from 'wagmi/chains'
-import { injected, coinbaseWallet } from 'wagmi/connectors'
 
-export const wagmiConfig = createConfig({
-  chains: [mainnet, arbitrum, optimism, base, polygon],
-  connectors: [
-    injected(),
-    coinbaseWallet({ appName: 'CrossPay' }),
-  ],
-  transports: {
-    [mainnet.id]: http(),
-    [arbitrum.id]: http(),
-    [optimism.id]: http(),
-    [base.id]: http(),
-    [polygon.id]: http(),
-  },
+// Get a free projectId at https://cloud.walletconnect.com
+const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? 'YOUR_PROJECT_ID'
+
+export const wagmiConfig = getDefaultConfig({
+  appName: 'CrossPay',
+  projectId: WALLETCONNECT_PROJECT_ID,
+  chains: [base, arbitrum, optimism, polygon, mainnet],
+  ssr: true,
 })
-
-declare module 'wagmi' {
-  interface Register {
-    config: typeof wagmiConfig
-  }
-}

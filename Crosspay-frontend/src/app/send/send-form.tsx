@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { injected, coinbaseWallet } from 'wagmi/connectors'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useAccount } from 'wagmi'
 import { getRoutes, executeRoute, isSVMAddress } from '@lifi/sdk'
 import type { Route, LiFiStepExtended } from '@lifi/sdk'
 import { parseUnits, formatUnits } from 'viem'
@@ -62,8 +62,6 @@ function stepLabel(step: LiFiStepExtended): string {
 
 export function SendForm() {
   const { address, isConnected } = useAccount()
-  const { connect } = useConnect()
-  const { disconnect } = useDisconnect()
 
   const [fromChainId, setFromChainId] = useState<SupportedChainId>(base.id)
   const [recipient, setRecipient] = useState('')
@@ -77,6 +75,9 @@ export function SendForm() {
   const [txStatus, setTxStatus] = useState<TxStatus>('idle')
   const [txStep, setTxStep] = useState('')
   const [txError, setTxError] = useState<string | null>(null)
+  const [txHash, setTxHash] = useState<string | null>(null)
+  const [txLink, setTxLink] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -150,7 +151,7 @@ export function SendForm() {
     setTxStep('Waiting for wallet confirmation…')
 
     try {
-      await executeRoute(quote.route, {
+      const result = await executeRoute(quote.route, {
         updateRouteHook: (updatedRoute) => {
           for (const step of updatedRoute.steps) {
             const label = stepLabel(step)
@@ -161,6 +162,12 @@ export function SendForm() {
           }
         },
       })
+
+      // Extract tx hash + explorer link from the completed route
+      const allProcesses = result.steps.flatMap(s => s.execution?.process ?? [])
+      const txProc = allProcesses.find(p => p.txHash)
+      setTxHash(txProc?.txHash ?? null)
+      setTxLink(txProc?.txLink ?? null)
       setTxStatus('done')
     } catch (err) {
       setTxStatus('error')
@@ -172,32 +179,74 @@ export function SendForm() {
     setTxStatus('idle')
     setTxStep('')
     setTxError(null)
+    setTxHash(null)
+    setTxLink(null)
+    setCopied(false)
     setAmount('')
     setRecipient('')
     setNote('')
     setQuote(null)
   }
 
+  const copyHash = () => {
+    if (!txHash) return
+    navigator.clipboard.writeText(txHash)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   // ── success screen ────────────────────────────────────────────────────────
 
   if (txStatus === 'done') {
     return (
-      <section className="rounded-2xl border border-border bg-card p-8 text-center shadow-[0_22px_70px_rgba(0,0,0,0.2)]">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-2/20 text-3xl text-accent-2">
-          ✓
-        </div>
-        <h2 className="text-2xl font-bold text-accent-2">Payment Sent!</h2>
-        <p className="mt-2 text-sm text-muted">
-          {quote?.toAmount} USDC is on its way to Solana.
-        </p>
-        {quote && (
-          <p className="mt-1 text-xs text-muted">
-            via {quote.bridgeName} · est. {quote.durationSec}s
+      <section className="rounded-2xl border border-border bg-card p-8 shadow-[0_22px_70px_rgba(0,0,0,0.2)]">
+        {/* icon + heading */}
+        <div className="mb-6 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-2/20 text-3xl text-accent-2">
+            ✓
+          </div>
+          <h2 className="text-2xl font-bold text-accent-2">Payment Sent!</h2>
+          <p className="mt-2 text-sm text-muted">
+            {quote?.toAmount} USDC is on its way to Solana.
           </p>
+          {quote && (
+            <p className="mt-1 text-xs text-muted">
+              via {quote.bridgeName} · est. {quote.durationSec}s
+            </p>
+          )}
+        </div>
+
+        {/* tx hash */}
+        {txHash && (
+          <div className="mb-6 rounded-xl border border-border bg-card-soft p-4">
+            <p className="mb-2 text-xs font-medium text-muted">Transaction Hash</p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 truncate rounded-lg bg-card px-3 py-2 text-xs font-mono text-foreground">
+                {txHash}
+              </code>
+              <button
+                onClick={copyHash}
+                className="shrink-0 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium transition hover:border-accent/50 hover:text-white"
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            {txLink && (
+              <a
+                href={txLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 flex items-center gap-1 text-xs text-accent hover:underline"
+              >
+                View on explorer ↗
+              </a>
+            )}
+          </div>
         )}
+
         <button
           onClick={reset}
-          className="mt-6 rounded-xl bg-gradient-to-r from-accent to-[#9c67ff] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+          className="w-full rounded-xl bg-gradient-to-r from-accent to-[#9c67ff] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
         >
           Send Another Payment
         </button>
@@ -219,41 +268,18 @@ export function SendForm() {
       </div>
 
       {/* wallet connect */}
-      {!isConnected ? (
-        <div className="mb-5 rounded-xl border border-border bg-card-soft p-4">
-          <p className="mb-3 text-sm text-muted">Connect your EVM wallet to send</p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => connect({ connector: injected() })}
-              className="flex-1 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium transition hover:border-accent/50 hover:text-white"
-            >
-              MetaMask
-            </button>
-            <button
-              onClick={() => connect({ connector: coinbaseWallet({ appName: 'CrossPay' }) })}
-              className="flex-1 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium transition hover:border-accent/50 hover:text-white"
-            >
-              Coinbase Wallet
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="mb-5 flex items-center justify-between rounded-xl border border-border bg-card-soft px-4 py-2.5">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-accent-2" />
-            <span className="text-sm font-medium">{shortAddr(address!)}</span>
-            <span className="text-xs text-muted">
-              · {FROM_CHAINS.find(c => c.id === fromChainId)?.name}
-            </span>
-          </div>
-          <button
-            onClick={() => disconnect()}
-            className="text-xs text-muted transition hover:text-white"
-          >
-            Disconnect
-          </button>
-        </div>
-      )}
+      <div className="mb-5 flex items-center justify-between">
+        <ConnectButton
+          showBalance={false}
+          chainStatus="icon"
+          accountStatus="address"
+        />
+        {isConnected && (
+          <span className="text-xs text-muted">
+            {shortAddr(address!)} · {FROM_CHAINS.find(c => c.id === fromChainId)?.name}
+          </span>
+        )}
+      </div>
 
       {/* form fields */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

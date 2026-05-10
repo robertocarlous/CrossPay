@@ -1,0 +1,25 @@
+{
+    "name": "crosspay-ai",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/app.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "nodemon src/app.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.19.2",
+        "axios": "^1.6.8",
+        "@anthropic-ai/sdk": "^0.24.3",
+        "dotenv": "^16.4.5",
+        "cors": "^2.8.5",
+        "express-rate-limit": "^7.4.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.4"
+    }
+}
