@@ -1,143 +1,96 @@
-## CrossPay AI
+# CrossPay
 
-Conversational Cross-Chain Payment Agent
+**Instant cross-chain payments from any EVM chain to Solana.**
 
-CrossPay AI is an intelligent conversational payment assistant that enables users to send crypto across chains using natural language. Instead of navigating complex wallets, bridges, and addresses, users simply chat with the AI to initiate payments.
-Think of it as Venmo + ChatGPT + Cross-Chain Infrastructure.
-"Send 100 USDC to @simze_dev for the freelance work"
-"Pay Similoluwa Abidoye 50 dollars on phone +234xxxxxxxx"
-"Bridge 50 USDC from Ethereum to Solana and send to @simze_dev"
-CrossPay AI parses the request, resolves the recipient, finds the best route via LI.FI, previews fees, and executes the transaction after confirmation.
+Live Demo → [https://crosspay-inky.vercel.app/](https://crosspay-inky.vercel.app/)
 
-## Table of Contents
+---
 
-Features
-Architecture
-Core AI Workflow
-Security Model
-Tech Stack
-Getting Started
-AI Agent
-Hackathon Demo Flow
-Roadmap
-License
+### What is CrossPay?
 
+CrossPay is a simple and fast way to send USDC from Ethereum, Base, Arbitrum, Optimism, Polygon, or any other EVM chain directly to Solana.
 
-## Features
-🧠 Conversational Payment Agent
-Natural language and voice payment execution with human-readable transaction flows and full cross-chain support.
-🌉 Cross-Chain Payments with LI.FI
-Automatic route optimization, fee estimation, and multi-chain bridging and swaps.
-Supported flows include:
+The main goal is to make cross-chain payments feel as easy as sending money on Venmo or Cash App. Instead of dealing with complicated bridges and long addresses, you can just tell the app what you want to do in plain English.
 
-Ethereum → Solana
-Base → Polygon
-Arbitrum → Ethereum
-Any route supported by LI.FI
+This project was built in **48 hours** during a hackathon focused on the best cross-chain experiences using **LI.FI Protocol**.
 
-👤 Smart Recipient Resolution
-Resolve recipients by username, ENS, wallet address, phone number, or social identity — for example @simze_dev, vitalik.eth, +234xxxxxxxx, or 0x123...
-💬 AI-Powered Onboarding
-An onboarding assistant that helps new users create or connect wallets, explains fees and bridge duration, handles payment claims, and answers FAQs.
-📄 Transaction Receipts & Notifications
-After successful execution: payment receipts, SMS notifications, email confirmations, and transaction history tracking.
-🌍 Multilingual Support
-Planned support for English, Yoruba, Hindi, French, and Swahili.
+---
 
-## Architecture
-User Input (Voice/Text)
-        ↓
-AI Intent Parser
-        ↓
-Recipient Resolver
-        ↓
-LI.FI Quote Engine
-        ↓
-Transaction Preview
-        ↓
-Wallet Confirmation
-        ↓
-Bridge / Swap Execution
-        ↓
-Receipt + Notifications
+### Key Features
 
-## Core AI Workflow
-The AI agent converts natural language into structured payment intents.
-Input:
-"Send 100 USDC to @simze_dev on Base"
-Parsed intent:
-json{
-  "action": "send",
-  "amount": 100,
-  "token": "USDC",
-  "recipient": "@simze_dev",
-  "destinationChain": "Base",
-  "note": "Payment"
-}
-The intent is then routed through recipient resolution → LI.FI quote generation → swap/bridge execution → wallet confirmation.
+- Send USDC from multiple EVM chains to Solana
+- AI Agent that understands natural language (e.g. “Send 50 USDC from Base to ...”)
+- Real-time route checking with fees and estimated arrival time
+- Powered by LI.FI for best routing and liquidity
+- Clean, modern, and mobile-friendly interface
+- Wallet connection with MetaMask and Coinbase Wallet
 
-## Security Model
-CrossPay AI never blindly signs transactions.
+---
 
-User confirmation is required before every execution
-The AI only suggests and prepares transactions — it never acts unilaterally
-Rate limiting is applied to flag suspicious activity
-Escrow remains the source of truth
-Large transfers are flagged for human review
+### How to Use
 
+1. Visit [crosspay-inky.vercel.app](https://crosspay-inky.vercel.app/)
+2. Connect your wallet (MetaMask or Coinbase)
+3. Use the AI chat box and type a message like:
+   - `Send 100 USDC from Base to 9ckS1iKToCyrYSUSVwLqTur3HtME2sFnWnPww1ZQASNf`
+   - `Send 25 USDC to EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+4. Review the best route shown (amount received, fees, bridge used)
+5. Click **Confirm & Send**
+6. Approve the transaction in your wallet
 
-## Tech Stack
-LayerTechnologiesFrontendNext.js, TailwindCSS, shadcn/ui, Wagmi, viemAIVercel AI SDK, Groq / OpenAI, LangGraph / LangChainBlockchainLI.FI SDK, Solana web3.js, EVM chains, Smart wallets / Account abstractionNotificationsTwilio, Resend
+---
 
-## Getting Started
-1. Clone the repository
-bashgit clone <repo-url>
-cd crosspay-ai
-2. Install dependencies
-bashnpm install
-3. Set up environment variables
-Create a .env.local file in the root:
+### Why We Built CrossPay
 
-4. Start the development server
-bashnpm run dev
-App runs on http://localhost:3000
+Crypto payments across different blockchains are still too complicated for normal people. Our aim was to build something closer to real-world payment apps while using powerful blockchain infrastructure (LI.FI + Solana).
 
-## AI Agent
-System Prompt
-You are CrossPay AI, a helpful crypto payment assistant.
-Help users send money across chains using LI.FI.
-Always ask for confirmation before executing.
-Parse natural language into structured payment intents.
-Available Tools
-ToolDescriptionresolveRecipient()Resolves usernames, ENS, or phone numbers to wallet addressesgetLifiQuote()Fetches the optimal bridge/swap routeexecuteBridge()Executes a cross-chain transactionsendReceipt()Generates a payment receiptnotifyRecipient()Sends SMS/email notification to the recipient
+Target users include:
+- Freelancers receiving international payments
+- Remote teams and DAOs
+- People sending money back home (e.g. Nigeria, India, etc.)
+- Crypto users who want simpler cross-chain transfers
 
-## Demo Flow
+---
 
-User opens the chat interface and types:
+### Current Status (MVP)
 
-   "Send 50 USDC to @simze_dev on Solana"
+This is a **hackathon MVP** (Minimum Viable Product). The core functionality is working:
 
-AI parses the intent, resolves the recipient, and fetches a LI.FI route
-AI displays estimated gas and fees, then requests confirmation
-User confirms
-CrossPay executes the bridge, swap, and payment
-Recipient receives funds, a notification, and a receipt
+- Natural language parsing
+- LI.FI route finding and execution
+- Cross-chain USDC transfer to Solana
 
+**Still in progress / planned for future:**
+- Phone number support + SMS notifications
+- Username system (@username)
+- Magic claim links for receivers
+- Escrow mechanism on Solana
+- Transaction history page
+- Split payments
 
-## Roadmap
+---
 
- Voice-powered payments
- WhatsApp payment assistant
- Telegram mini app
- AI recurring payments
- Smart payment reminders
- Social graph payments
- Autonomous payment agents
- Fraud detection engine
+### Tech Stack
 
+- **Framework**: Next.js 16 (App Router) + TypeScript
+- **Styling**: Tailwind CSS
+- **Web3**: Wagmi, Viem, LI.FI SDK
+- **AI Agent**: Custom parser with Next.js API routes
+- **Deployment**: Vercel
 
-## Contributors
-Built for hackathons, builders, and the future of conversational crypto payments.
+---
 
-## License
-MIT
+### Running Locally
+
+```bash
+# Clone the repo
+git clone [https://github.com/robertocarlous/crosspay](https://github.com/robertocarlous/CrossPay.git
+
+# Go into the folder
+cd crosspay-frontend
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
