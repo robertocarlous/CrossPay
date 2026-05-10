@@ -85,7 +85,7 @@ This is a **hackathon MVP** (Minimum Viable Product). The core functionality is 
 
 ```bash
 # Clone the repo
-git clone [[https://github.com/robertocarlous/crosspay]]
+git clone https://github.com/robertocarlous/crosspay
 
 # Go into the folder
 cd crosspay-frontend
