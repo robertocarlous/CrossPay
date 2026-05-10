@@ -31,12 +31,13 @@ This project was built in **48 hours** during a hackathon focused on the best cr
 
 1. Visit [crosspay-inky.vercel.app](https://crosspay-inky.vercel.app/)
 2. Connect your wallet (MetaMask or Coinbase)
-3. Use the AI chat box and type a message like:
+3. Manually send from the send page
+4. Use the AI chat box and type a message like:
    - `Send 100 USDC from Base to 9ckS1iKToCyrYSUSVwLqTur3HtME2sFnWnPww1ZQASNf`
    - `Send 25 USDC to EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
-4. Review the best route shown (amount received, fees, bridge used)
-5. Click **Confirm & Send**
-6. Approve the transaction in your wallet
+5. Review the best route shown (amount received, fees, bridge used)
+6. Click **Confirm & Send**
+7. Approve the transaction in your wallet
 
 ---
 
@@ -55,7 +56,7 @@ Target users include:
 ### Current Status (MVP)
 
 This is a **hackathon MVP** (Minimum Viable Product). The core functionality is working:
-
+- Sending from EVM chains to a Solana address
 - Natural language parsing
 - LI.FI route finding and execution
 - Cross-chain USDC transfer to Solana
@@ -84,7 +85,7 @@ This is a **hackathon MVP** (Minimum Viable Product). The core functionality is 
 
 ```bash
 # Clone the repo
-git clone [https://github.com/robertocarlous/crosspay](https://github.com/robertocarlous/CrossPay.git
+git clone [[https://github.com/robertocarlous/crosspay]]
 
 # Go into the folder
 cd crosspay-frontend
