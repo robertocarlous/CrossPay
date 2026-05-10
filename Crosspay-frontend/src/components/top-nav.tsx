@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -15,8 +14,6 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   return (
     <header className="sticky top-4 z-30 mb-8 rounded-2xl border border-border/70 bg-card/90 px-4 py-3 shadow-[0_12px_44px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:px-5">
@@ -48,9 +45,7 @@ export function TopNav() {
           })}
         </nav>
 
-        {mounted && (
-          <WalletMultiButton className="h-10! rounded-xl! bg-linear-to-r! from-accent! to-[#8f6eff]! px-4! text-sm! font-semibold! transition! hover:brightness-110!" />
-        )}
+        <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
       </div>
 
       <nav className="mt-3 grid grid-cols-5 gap-1 md:hidden">

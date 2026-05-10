@@ -11,18 +11,16 @@ Always respond with ONLY a raw JSON object — no markdown, no explanation.
 JSON shape:
 {
   "amount": number | null,
-  "recipient": string | null,   // wallet address, username, @handle, or phone number
+  "recipient": string | null,   // username, @handle, or phone number
   "currency": string | null,    // e.g. "USDC", "SOL", "ETH" — uppercase
-  "fromChain": string | null,   // source chain name e.g. "Base", "Arbitrum", "Optimism", "Polygon", "Ethereum"
   "note": string | null         // reason/memo if mentioned
 }
 
 Rules:
 - If a value is not mentioned, set it to null.
 - Convert written numbers to digits: "twenty" → 20
-- Strip @ prefix from handles but keep phone numbers and wallet addresses as-is
-- Currency defaults to null if not specified (don't guess)
-- fromChain: extract from phrases like "from Base", "on Arbitrum", "via Polygon" — return the chain name only, title-cased`;
+- Strip @ prefix from handles but keep phone numbers as-is
+- Currency defaults to null if not specified (don't guess)`;
 
 router.post("/", async (req, res) => {
   const { text } = req.body;

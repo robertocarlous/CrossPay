@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lifi/sdk": "^3.16.3",
+    "@rainbow-me/rainbowkit": "^2.2.11",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
